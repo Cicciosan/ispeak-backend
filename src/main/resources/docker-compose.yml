@@ -1,0 +1,53 @@
+name: ispeak
+services:
+
+  app:
+    image: ispeak:latest
+    container_name: ispeak
+    expose:
+      - "8081"
+    environment:
+      QUARKUS_OIDC_AUTH_SERVER_URL: http://auth:8080/auth/realms/ispeak
+      QUARKUS_OIDC_TOKEN_ISSUER: http://localhost/auth/realms/ispeak
+
+  auth:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev
+    restart: unless-stopped
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: auth-db
+      KC_DB_URL_DATABASE: ispeak
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+      #KC_HOSTNAME: http://localhost/auth
+      KC_HTTP_RELATIVE_PATH: /auth
+    expose:
+      - "8080"
+
+  auth-db:
+    image: postgres:latest
+    container_name: keycloak-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ispeak
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+
+  web:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+
+volumes:
+  auth-db-data:
