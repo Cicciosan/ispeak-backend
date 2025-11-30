@@ -9,6 +9,8 @@ services:
     environment:
       QUARKUS_OIDC_AUTH_SERVER_URL: http://auth:8080/auth/realms/ispeak
       QUARKUS_OIDC_TOKEN_ISSUER: http://localhost/auth/realms/ispeak
+    profiles:
+      - prod
 
   auth:
     image: quay.io/keycloak/keycloak:latest
