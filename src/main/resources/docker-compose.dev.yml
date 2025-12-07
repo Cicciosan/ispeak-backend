@@ -1,17 +1,6 @@
 name: ispeak
 services:
 
-  app:
-    image: ispeak:latest
-    container_name: ispeak
-    expose:
-      - "8081"
-    environment:
-      QUARKUS_OIDC_AUTH_SERVER_URL: http://auth:8080/auth/realms/ispeak
-      QUARKUS_OIDC_TOKEN_ISSUER: http://localhost/auth/realms/ispeak
-    profiles:
-      - prod
-
   app-db:
     image: postgres:latest
     container_name: ispeak-db
@@ -49,11 +38,8 @@ services:
 
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-
-      #KC_HOSTNAME: http://localhost/auth
-      KC_HTTP_RELATIVE_PATH: /auth
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
 
   auth-db:
     image: postgres:latest
@@ -65,14 +51,6 @@ services:
       POSTGRES_PASSWORD: admin
     volumes:
       - auth-db-data:/var/lib/postgresql/data
-
-  web:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
 
 volumes:
   auth-db-data:
