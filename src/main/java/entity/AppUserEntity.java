@@ -26,12 +26,14 @@ public class AppUserEntity extends PanacheEntityBase {
     @Column(nullable = true)
     public String iconHash;
 
-    @OneToMany
+    @OneToMany(mappedBy = "host")
     public List<MeetingEntity> meetings;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     public LanguageEntity motherLanguage;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     public LanguageEntity learningLanguage;
 }

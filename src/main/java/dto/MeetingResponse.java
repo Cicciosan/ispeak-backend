@@ -6,6 +6,7 @@ import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,7 +20,7 @@ public class MeetingResponse {
     private final int duration;
     private final String location;
     private final int maxParticipants;
-    private final int participants;
+    private final List<String> participantsGuids;
 
     
     public static MeetingResponse fromEntity(MeetingEntity entity) {
@@ -30,7 +31,7 @@ public class MeetingResponse {
                 .startDate(entity.startDate)
                 .duration(entity.duration)
                 .maxParticipants(entity.maxParticipants)
-                .participants(entity.participants)
+                .participantsGuids(entity.participants.stream().map((e) -> e.guid).toList())
                 .build();
     }
 

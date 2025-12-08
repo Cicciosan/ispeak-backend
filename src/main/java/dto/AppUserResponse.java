@@ -16,7 +16,7 @@ public class AppUserResponse {
     private final String guid;
     private final String name;
     private final String surname;
-    private final List<MeetingEntity> meetings;
+    private final List<Long> meetings;
     private final String motherLanguage;
     private final String learningLanguage;
 
@@ -26,7 +26,7 @@ public class AppUserResponse {
                 .guid(entity.guid)
                 .name(entity.name)
                 .surname(entity.surname)
-                .meetings(entity.meetings)
+                .meetings(entity.meetings.stream().map((e) -> e.id).toList())
                 .motherLanguage(entity.motherLanguage.code)
                 .learningLanguage(entity.learningLanguage.code)
                 .build();
